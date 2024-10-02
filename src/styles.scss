@@ -1,0 +1,52 @@
+/* Estilos para inputs y selects con floating labels */
+.form-floating {
+    position: relative;
+}
+
+.form-control,
+.form-select {
+    border: none;
+    border-bottom: 2px solid #ccc; /* Línea inferior predeterminada */
+    transition: border-color 0.2s; /* Transición suave para el color */
+    border-radius: 0; /* Eliminar esquinas redondeadas */
+}
+
+/* Estilo para inputs y selects válidos */
+input.ng-valid[required],
+select.ng-valid[required],
+input.ng-valid.required,
+select.ng-valid.required {
+    border-bottom: 1px solid #42a948; /* verde */
+}
+
+/* Estilo por defecto para inputs y selects inválidos */
+input.ng-invalid:not(form),
+select.ng-invalid:not(form) {
+    border-bottom: 1px solid #ccc; /* gris */
+}
+
+/* Estilo para inputs y selects inválidos que no son nuevos */
+input.ng-invalid:not(form):not(.ng-pristine),
+select.ng-invalid:not(form):not(.ng-pristine) {
+    border-bottom: 2px solid #f44336; /* rojo */
+}
+
+/* Estilo para el input o select al enfocar */
+.form-control:focus,
+.form-select:focus {
+    box-shadow: none; /* Eliminar sombra */
+    border-bottom: 2px solid #007bff; /* Azul al enfocar */
+}
+
+/* Estilo para etiqueta en estado válido o inválido */
+.form-control.ng-valid:focus ~ label,
+.form-select.ng-valid:focus ~ label,
+input.ng-valid[required] ~ label,
+select.ng-valid[required] ~ label {
+    color: #42a948; /* Verde cuando es válido */
+    transform: translateY(-1.25rem) translateX(0.15rem) scale(0.85); /* Elevar y reducir */
+}
+
+
+
+

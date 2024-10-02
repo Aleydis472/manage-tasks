@@ -1,0 +1,131 @@
+<div class="modal fade" id="taskform" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" >
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Añadir tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form [formGroup]="taskForm">
+                    <div class="row g-3">
+
+                        <div class="col-md-8">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="taskTitle" formControlName="title"
+                                    placeholder="Título de la tarea">
+                                <label for="taskTitle">Título de la tarea</label>
+                                <div *ngIf="taskForm.get('title')?.invalid && taskForm.get('title')?.touched"
+                                    class="text-danger">
+                                    El título es obligatorio.
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                            <input type="date" class="form-control" id="taskdateEnd" formControlName="dateEnd"
+                                    placeholder="Fecha límite">
+                                <label for="taskdateEnd">Fecha límite</label>
+                                <div class="text-danger" *ngIf="taskForm.get('dateEnd')?.hasError('required') && taskForm.get('dateEnd')?.touched">
+                                    La fecha es obligatoria.
+                                  </div>
+                              
+                                  <div class="text-danger"  *ngIf="taskForm.get('dateEnd')?.hasError('invalidDate') && taskForm.get('dateEnd')?.touched && !taskForm.get('dateEnd')?.hasError('required')">
+                                    La fecha límite no puede ser anterior a la fecha actual.
+                                  </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Personas -->
+
+                    <div class="mt-4" formArrayName="people">
+                        <div class="text-dark fw-bolder  mb-3 d-grid gap-2 d-md-flex justify-content-md"
+                            *ngIf="people.controls.length > 0">Personas Asociadas
+                            <button type="button" class="btn btn-sm btn-success" (click)="addPerson()"><i
+                                    class="fa-solid fa-plus"></i></button>
+
+                        </div>
+                        <div *ngFor="let person of people.controls; let i=index" [formGroupName]="i" class="row g-3 mt-2">
+                            
+                            <p class="fst-italic text-opacity-75 text-black-50  px-2 py-0 m-0" *ngIf="people.controls.length > 1">Persona #{{i +1 }}</p>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="personName{{i}}" formControlName="name"
+                                        placeholder="Nombre completo">
+                                    <label for="personName{{i}}">Nombre completo</label>
+                                    <div *ngIf="person.get('name')?.invalid && person.get('name')?.touched"
+                                        class="text-danger">
+                                        El nombre debe tener al menos 5 caracteres.
+                                    </div>
+                                    <div *ngIf="taskForm.hasError('duplicateNames', 'people')" class="text-danger">
+                                        Los nombres de las personas no pueden repetirse.
+                                      </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-5">
+                                <div class="form-floating">
+                                    <input type="number" class="form-control" id="personAge{{i}}" formControlName="age"
+                                        placeholder="Edad">
+                                    <label for="personAge{{i}}">Edad</label>
+                                    <div *ngIf="person.get('age')?.invalid && person.get('age')?.touched"
+                                        class="text-danger">
+                                        La edad debe ser mayor a 18 años.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-1 d-flex align-items-center">
+                                <div class="cursor-pointer">
+                                    <i class="fa-solid fa-xmark text-black-50 fa-xl" (click)="removePerson(i)"></i>
+                                </div>
+                            </div>
+
+                            <!-- Habilidades -->
+                            <div class="col-12 px-4" formArrayName="skills">
+                                <div
+                                    class="text-dark text-opacity-75 fw-bolder mb-3 d-grid gap-2 d-md-flex justify-content-md">
+                                    Habilidades <button type="button" class="btn btn-primary btn-sm "
+                                        (click)="addSkill(i)"><i class="fa-solid fa-plus"></i></button></div>
+
+                                <div class="row" *ngFor="let skill of getSkills(i).controls; let j=index">
+                                    <div class="col-11">
+                                        <div class="form-floating mb-3">
+                                            <input type="text" class="form-control" id="skill{{i}}{{j}}"
+                                                [formControlName]="j" placeholder="Habilidad">
+                                            <label for="skill{{i}}{{j}}">Habilidad {{j +1}}</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-1 d-flex align-items-center">
+                                        <div *ngIf="getSkills(i).controls.length > 1">
+                                            <i class="fa-solid fa-xmark text-black-50 fa-xl"
+                                                (click)="removeSkill(i, j)"></i>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+
+                                <hr *ngIf="people.controls.length > 1" class="mt-2 mb-2">
+                            </div>
+
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4 mb-4" *ngIf="people.controls.length === 0">
+                            <button type="button" class="btn btn-outline-success" (click)="addPerson()">Añadir
+                                persona</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary " data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary float-end"  (click)="save()">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>

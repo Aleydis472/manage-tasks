@@ -1,0 +1,84 @@
+<section class="todoapp">
+    <header class="header">
+        <div class="container box-header">
+            <div class="title fw-bolder  mb-3 d-grid gap-2 d-md-flex justify-content-md"><span>Todas mis tareas en
+                    un solo lugar </span>
+                <div class="mx-5 icon-add" data-bs-toggle="modal" data-bs-target="#taskform"><i
+                        class="fa-solid fa-plus"></i></div>
+            </div>
+        </div>
+    </header>
+    <div class="content todoapp-wrapper">
+        <section class="main">
+            <div class="todo-list mb-2">
+                <div class=" row row-cols-1 row-cols-md-3 row-cols-lg-3 row-cols-xl-4 g-3">
+
+                    <div *ngFor="let task of taskService.filteredTasks()">
+
+                        <li class="card">
+                            <div class="row">
+                                <div class="col-10">
+                                    <input (change)="toggleTaskCompletion(task.id)" class="toggle" type="checkbox"
+                                        [checked]="task.completed" />
+                                    <label
+                                        [ngClass]="task.completed ? ['text-decoration-line-through', 'text-black-50', 'fs-4'] : ['fs-4']">{{task.title
+                                        | titlecase}}</label>
+                                    <label class="date-end ms-1 text-black-50">Fecha de entrega {{task.dateEnd | date
+                                        :'dd/MM/yy'}}</label>
+                                </div>
+
+                                <div class="col-2">
+                                    <div (click)="deleteTask(task)" class="destroy"></div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col" [class.opacity-50]="task.completed">
+                                        <div *ngIf="task.people.length; " class=" mb-3 ">
+                                            <h6 *ngIf="task.people.length" class=" ms-3 text-d">Asignados:</h6>
+                                            <ul class="list-unstyled ms-5 " *ngIf="task.people.length">
+                                                <li *ngFor="let person of task.people; let i= index " class="mb-2">
+                                                    <h6>{{i+1}}. {{ person.name }} - {{person.age}} años</h6>
+                                                    <div class="skills mb-2">
+                                                        <small>Habilidades: {{ person.skills.join(', ')
+                                                            }}</small>
+                                                    </div>
+
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <span class="todo-count float-start"><strong>{{taskService.filteredTasks().length}}</strong>
+
+                <span>
+                    {{taskService.filteredTasks().length === 1 ? "Item" : "Items"}}
+                </span>
+
+            </span>
+            <ul class="filters float-end mt-1">
+                <li>
+                    <a (click)="setFilter('all')" [class.selected]="taskService.filterSelected() === 'all'">Todos</a>
+                </li>
+                <li>
+                    <a (click)="setFilter('pending')"
+                        [class.selected]="taskService.filterSelected() === 'pending'">Pendiente</a>
+                </li>
+                <li>
+                    <a (click)="setFilter('completed')"
+                        [class.selected]="taskService.filterSelected() === 'completed'">Completetado</a>
+                </li>
+            </ul>
+        </footer>
+
+    </div>
+</section>
+
+<app-task-form></app-task-form>
